@@ -1,9 +1,18 @@
 import django_filters.rest_framework
 from django.shortcuts import render
+from django.contrib.auth.models import User
 from .models import *
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView, RetrieveUpdateDestroyAPIView
 from .serializers import *
 from rest_framework import filters
+
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+
 
 def index(request):
     return render(request, 'main/index.html')
@@ -23,6 +32,48 @@ def post(request):
     return render(request, 'main/posts.html', context)
 
 
+class AuthTokenView(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+                'token': token.key,
+                'user_id': user.pk,
+                'email': user.email,
+                'name': user.first_name,
+            }
+        )
+           
+class AuthTokenViewOut(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        Token.objects.filter(user=user).delete()
+        return Response({
+            'message': 'Logged out successfully',
+        })
+
+class RegistrationView(CreateAPIView):
+    serializer_class = UserRegistrationSerializers
+    
+    
+    def post(self, request, *args, **kwargs):
+        serializer = UserRegistrationSerializers(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = User.objects.create_user(username=serializer.validated_data['username'], password=serializer.validated_data['password'])
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+                'username': user.username,
+                'token': token.key
+            }
+        )
+
+
 class UsersList(ListAPIView):
     serializer_class = UsersSerializers
     filter_backends = {filters.SearchFilter, filters.OrderingFilter, django_filters.rest_framework.DjangoFilterBackend}
@@ -33,6 +84,9 @@ class UsersList(ListAPIView):
     def get_queryset(self):
         queryset = Users.objects.all()
         return queryset
+    
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class UsersCreate(CreateAPIView):
     serializer_class = UsersSerializers
@@ -40,10 +94,16 @@ class UsersCreate(CreateAPIView):
     def get_queryset(self):
         queryset = Users.objects.all()
         return  queryset
+    
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class UsersRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = UserDetailSerializers
     queryset = Users.objects.all()
+
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class PostsList(ListAPIView):
@@ -56,6 +116,7 @@ class PostsList(ListAPIView):
         queryset = Posts.objects.all()
         return queryset
     
+    
 class PostsCreate(CreateAPIView):
     serializer_class = PostsSerializers
 
@@ -63,9 +124,15 @@ class PostsCreate(CreateAPIView):
         queryset = Posts.objects.all()
         return queryset
     
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
 class PostsRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = PostsDetailSerializers
     queryset = Posts.objects.all()
+
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class CommentsList(ListAPIView):
@@ -88,5 +155,8 @@ class CommentsCreate(CreateAPIView):
 class CommentsRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = CommentsDetailSerializers
     queryset = Comments.objects.all()
+
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 

@@ -1,6 +1,16 @@
 from rest_framework import serializers
 from .models import *
 
+class UserRegistrationSerializers(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+    password2 = serializers.CharField()
+
+    def validate(self, data):
+        if data['password'] != data['password2']:
+            raise serializers.ValidationError('Пароли не совпадают')
+        return data
+
 class UsersSerializers(serializers.ModelSerializer):
     class Meta:
         model = Users

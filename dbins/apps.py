@@ -6,3 +6,8 @@ class DbinsConfig(AppConfig):
     name = 'dbins'
     verbose_name = 'БД Инстаграмм'
     verbose_name_plural = 'БД Инстаграммы'
+
+
+    def ready(self):
+        print('dbins app ready')
+        import dbins.signals
