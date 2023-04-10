@@ -46,6 +46,7 @@ class AuthTokenView(ObtainAuthToken):
                 'name': user.first_name,
             }
         )
+    permission_classes = [IsAuthenticatedOrReadOnly]
            
 class AuthTokenViewOut(ObtainAuthToken):
 
@@ -57,6 +58,7 @@ class AuthTokenViewOut(ObtainAuthToken):
         return Response({
             'message': 'Logged out successfully',
         })
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class RegistrationView(CreateAPIView):
     serializer_class = UserRegistrationSerializers
@@ -72,7 +74,6 @@ class RegistrationView(CreateAPIView):
                 'token': token.key
             }
         )
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
@@ -81,7 +82,6 @@ class UsersList(ListAPIView):
     filter_backends = {filters.SearchFilter, filters.OrderingFilter, django_filters.rest_framework.DjangoFilterBackend}
     filterset_fields = ('create_at',)
     search_fields = ('user_name', 'email')
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
@@ -92,7 +92,6 @@ class UsersList(ListAPIView):
 
 class UsersCreate(CreateAPIView):
     serializer_class = UsersSerializers
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
@@ -105,7 +104,6 @@ class UsersRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = UserDetailSerializers
     queryset = Users.objects.all()
 
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
@@ -114,7 +112,6 @@ class PostsList(ListAPIView):
     filter_backends = {filters.SearchFilter, filters.OrderingFilter, django_filters.rest_framework.DjangoFilterBackend}
     filterset_fields = ('create_at',)
     search_fields = ('body', 'title')
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
@@ -124,7 +121,6 @@ class PostsList(ListAPIView):
     
 class PostsCreate(CreateAPIView):
     serializer_class = PostsSerializers
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
@@ -136,7 +132,6 @@ class PostsCreate(CreateAPIView):
 class PostsRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = PostsDetailSerializers
     queryset = Posts.objects.all()
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
    
@@ -147,7 +142,6 @@ class CommentsList(ListAPIView):
     filter_backends = {filters.SearchFilter, filters.OrderingFilter, django_filters.rest_framework.DjangoFilterBackend}
     filterset_fields = ('create_at',)
     search_fields = ('body', )
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
@@ -156,7 +150,6 @@ class CommentsList(ListAPIView):
     
 class CommentsCreate(CreateAPIView):
     serializer_class = CommentsSerializers
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
@@ -169,7 +162,6 @@ class CommentsRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = CommentsDetailSerializers
     queryset = Comments.objects.all()
 
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
