@@ -72,6 +72,8 @@ class RegistrationView(CreateAPIView):
                 'token': token.key
             }
         )
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class UsersList(ListAPIView):
@@ -79,24 +81,25 @@ class UsersList(ListAPIView):
     filter_backends = {filters.SearchFilter, filters.OrderingFilter, django_filters.rest_framework.DjangoFilterBackend}
     filterset_fields = ('create_at',)
     search_fields = ('user_name', 'email')
-    
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = Users.objects.all()
         return queryset
     
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    
 
 class UsersCreate(CreateAPIView):
     serializer_class = UsersSerializers
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = Users.objects.all()
         return  queryset
     
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    
 
 class UsersRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = UserDetailSerializers
@@ -111,6 +114,8 @@ class PostsList(ListAPIView):
     filter_backends = {filters.SearchFilter, filters.OrderingFilter, django_filters.rest_framework.DjangoFilterBackend}
     filterset_fields = ('create_at',)
     search_fields = ('body', 'title')
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = Posts.objects.all()
@@ -119,20 +124,22 @@ class PostsList(ListAPIView):
     
 class PostsCreate(CreateAPIView):
     serializer_class = PostsSerializers
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = Posts.objects.all()
         return queryset
     
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    
     
 class PostsRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = PostsDetailSerializers
     queryset = Posts.objects.all()
-
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+   
 
 
 class CommentsList(ListAPIView):
@@ -140,6 +147,8 @@ class CommentsList(ListAPIView):
     filter_backends = {filters.SearchFilter, filters.OrderingFilter, django_filters.rest_framework.DjangoFilterBackend}
     filterset_fields = ('create_at',)
     search_fields = ('body', )
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = Comments.objects.all()
@@ -147,10 +156,14 @@ class CommentsList(ListAPIView):
     
 class CommentsCreate(CreateAPIView):
     serializer_class = CommentsSerializers
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = Comments.objects.all()
         return queryset
+    
+    
     
 class CommentsRUD(RetrieveUpdateDestroyAPIView):
     serializer_class = CommentsDetailSerializers
