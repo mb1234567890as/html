@@ -1,0 +1,26 @@
+body {
+    background: #5c4d52;
+}
+
+aside img {
+    width: 650px;
+    float: center;
+}
+
+aside h5 {
+    margin-top: 30px;
+    font-size: 50px;
+}
+
+main ul li {list-style: none;}
+post ul li {list-style: none;}
+
+aside main h1 {
+    margin-top: 30px;
+    font-size: 50px;
+    float: right;
+}
+
+post ul div img {
+    width: 300px;
+}

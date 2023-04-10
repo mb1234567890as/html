@@ -1,0 +1,24 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'main/css/main.css'%}">
+    <title>Instagramm</title>
+</head>
+<body>
+    <main>
+        <h1>Users</h1>
+        <ul>
+            {% for user in users %}
+            <h4>есть</h4>
+            <li>Аккаунт: {{ user.user_name }}</li>
+            <li>Почта: {{ user.email }}</li>
+            <li>Пороль: {{user.password}}</li>
+            <li>Дата создания: {{ user.create_at }}</li>
+            {% endfor %}
+        </ul>
+    </main>
+
+</body>
+</html>
