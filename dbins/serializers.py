@@ -1,3 +1,4 @@
+
 from rest_framework import serializers
 from .models import *
 
@@ -26,13 +27,17 @@ class UserDetailSerializers(serializers.ModelSerializer):
 class PostsSerializers(serializers.ModelSerializer):
     class Meta:
         model = Posts
-        fields = ('id', 'title', 'body', 'image','user_id', 'create_at',  )
+        fields = ('id', 'title', 'body', 'image', 'user_id', 'create_at', 'likes' )
+
+    
 
 class PostsDetailSerializers(serializers.ModelSerializer):
     detail = UsersSerializers(many=True, read_only=True)
     class Meta:
         model = Posts
-        fields = ('id', 'title', 'body', 'image' , 'user_id', 'create_at', 'detail', )
+        fields = ('id', 'title', 'body', 'image', 'user_id', 'create_at', 'detail', 'likes' )
+
+    
 
 
 class CommentsSerializers(serializers.ModelSerializer):
@@ -45,3 +50,16 @@ class CommentsDetailSerializers(serializers.ModelSerializer):
     class Meta:
         model = Comments
         fields = ('id', 'post', 'user', 'body', 'create_at',  'detail', )
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+class CommentsDetailSerializers(serializers.ModelSerializer):
+    detail = UsersSerializers(many=True, read_only=True)
+    class Meta:
+        model = Comments
+        fields = '__all__'
+        read_only_fields = ('id',)

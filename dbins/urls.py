@@ -1,7 +1,17 @@
-from django.urls import path
+from django.urls import path, include
 from . import views 
 
+from django.views.generic import TemplateView
+
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'like', views.LikeViewSet, basename='like')
+
+app_name = 'user'
+
 urlpatterns = [
+
     path('api-token-auth',views.AuthTokenView.as_view(), name='api_token_auth'),
     path('api-token-authout/', views.AuthTokenViewOut.as_view(), name='api_auth'),
 
@@ -19,8 +29,17 @@ urlpatterns = [
     path('comment/create/', views.CommentsCreate.as_view()),
     path('comment/rud/<int:pk>/', views.CommentsRUD.as_view()),
 
-    path('', views.index, name='home'),
+    path('api/', include(router.urls)),
+
+
+    
     path('users1/', views.users, name='users'),
     path('posts1/', views.post, name='post'),
+
+    path('', TemplateView.as_view(template_name='index.html'), name='index'),
+
+    path('user_template/', views.UserTemplateView.as_view(), name='user_template'),
+    path('user_detail/<int:pk>/', views.UserTemplateDetailView.as_view(), name='user_detail'),
+    path('user_create/', views.UserTemplateCreateView.as_view(), name='user_create'),
 
 ]

@@ -1,0 +1,11 @@
+{% extends 'index.html' %}
+
+ <h1>My First Template</h1>
+
+ {% block content %}
+
+     <p>{{user.user_name}}</p>
+     <p>{{user.email}}</p>
+     <p>{{user.password}}</p>
+
+{% endblock %}

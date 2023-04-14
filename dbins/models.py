@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 class Users(models.Model):
@@ -21,11 +22,13 @@ class Posts(models.Model):
     image = models.ImageField(upload_to='photos/', verbose_name='Фото')
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name='id пользователя')
     create_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создание')
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователи', related_name='seller')
+    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True, verbose_name='Лайки')
 
     def __str__(self):
         return str(self.body)
     
-    class Meta:
+    class Meta: 
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
         ordering = ['create_at']
@@ -43,6 +46,27 @@ class Comments(models.Model):
         verbose_name = 'Коментария'
         verbose_name_plural = 'Коментарии'
         ordering = ['create_at']
+
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE, verbose_name='Пост')
+    create_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+
+    def __str__(self):
+        return f"{self.user} liked {self.post}"
+    
+    class Meta:
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
+        unique_together = ('user', 'post')
+
+
+
+
+
+
+
 
 
 # class Like(models.Model):
