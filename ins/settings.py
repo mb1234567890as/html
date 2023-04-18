@@ -162,3 +162,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
 }
+
+GMAIL = env('GMAIL_USER')
+GMAIL_PASSWORD = env('GMAIL_PASSWORD')
