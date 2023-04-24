@@ -19,6 +19,16 @@ from django.views.generic.detail import DetailView
 from django.urls import reverse
 from .forms import *
 
+#celery
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.views.generic.edit import FormView
+from django.shortcuts import redirect
+
+from .forms import GenerateRandomUserForm
+from .tasks import create_random_user_accounts
+from celery import shared_task
+
 
 def index(request):
     return render(request, 'main/index.html')
@@ -228,3 +238,13 @@ class UserTemplateCreateView(CreateView):
      # redirect to movie_detail
     def get_success_url(self):
         return reverse('user_detail', kwargs={'pk': self.object.pk})
+    
+class GenerateRandomUserView(FormView):
+    template_name = 'main/generate_random_users.html'
+    form_class = GenerateRandomUserForm
+
+    def form_valid(self, form):
+        total = form.cleaned_data.get('total')
+        create_random_user_accounts.delay(total)
+        messages.success(self.request, 'We are generating your random users! Wait a moment and refresh this page.')
+        return redirect('user_list')

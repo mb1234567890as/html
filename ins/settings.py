@@ -165,3 +165,10 @@ REST_FRAMEWORK = {
 
 GMAIL = env('GMAIL_USER')
 GMAIL_PASSWORD = env('GMAIL_PASSWORD')
+
+GOOGLE_KEY = BASE_DIR / 'googlemail.json'
+GOOGLE_TOKEN = BASE_DIR / 'token.json'
+
+# celery
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

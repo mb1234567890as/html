@@ -8,7 +8,6 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'like', views.LikeViewSet, basename='like')
 
-app_name = 'user'
 
 urlpatterns = [
 
@@ -42,4 +41,7 @@ urlpatterns = [
     path('user_detail/<int:pk>/', views.UserTemplateDetailView.as_view(), name='user_detail'),
     path('user_create/', views.UserTemplateCreateView.as_view(), name='user_create'),
 
+    path('user_list/', views.GenerateRandomUserView.as_view(), name='user_list'),
+
 ]
+
