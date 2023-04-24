@@ -2,12 +2,11 @@ from django.apps import AppConfig
 
 
 class DbinsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'dbins'
-    verbose_name = 'БД Инстаграмм'
-    verbose_name_plural = 'БД Инстаграммы'
-
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "dbins"
+    verbose_name = "БД Инстаграмм"
+    verbose_name_plural = "БД Инстаграммы"
 
     def ready(self):
-        print('dbins app ready')
+        print("dbins app ready")
         import dbins.signals

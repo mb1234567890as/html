@@ -5,26 +5,29 @@ import django.utils.timezone
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('dbins', '0001_initial'),
+        ("dbins", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='posts',
-            name='image',
-            field=models.ImageField(default=django.utils.timezone.now, upload_to='photos/', verbose_name='Фото'),
+            model_name="posts",
+            name="image",
+            field=models.ImageField(
+                default=django.utils.timezone.now,
+                upload_to="photos/",
+                verbose_name="Фото",
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='comments',
-            name='body',
-            field=models.TextField(max_length=100, verbose_name='Коментарии'),
+            model_name="comments",
+            name="body",
+            field=models.TextField(max_length=100, verbose_name="Коментарии"),
         ),
         migrations.AlterField(
-            model_name='posts',
-            name='body',
-            field=models.TextField(max_length=100, verbose_name='Пост'),
+            model_name="posts",
+            name="body",
+            field=models.TextField(max_length=100, verbose_name="Пост"),
         ),
     ]

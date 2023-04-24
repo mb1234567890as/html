@@ -6,17 +6,22 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('dbins', '0002_auto_20230407_1448'),
+        ("dbins", "0002_auto_20230407_1448"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='posts',
-            name='seller',
-            field=models.ForeignKey(default=8, on_delete=django.db.models.deletion.CASCADE, related_name='seller', to='auth.user', verbose_name='Пользователи'),
+            model_name="posts",
+            name="seller",
+            field=models.ForeignKey(
+                default=8,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="seller",
+                to="auth.user",
+                verbose_name="Пользователи",
+            ),
             preserve_default=False,
         ),
     ]
