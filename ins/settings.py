@@ -28,7 +28,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 
 # Application definition
@@ -40,16 +40,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
+    
     "drf_yasg2",
     "dbins.apps.DbinsConfig",
+    'django_celery_beat',
 ]
 
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -82,13 +86,13 @@ WSGI_APPLICATION = "ins.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
+        "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env("DB"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST"),
-        "PORT": env("DB_PORT"),
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "HOST": env("POSTGRES_HOST"),
+        "PORT": env("POSTGRES_PORT"),
     }
 }
 
@@ -159,5 +163,24 @@ GOOGLE_KEY = BASE_DIR / "googlemail.json"
 GOOGLE_TOKEN = BASE_DIR / "token.json"
 
 # celery
-CELERY_BROKER_URL = "redis://localhost:6379/0"
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+# CELERY_BROKER_URL = "redis://localhost:6379/0"
+# CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+CELERY_ACCEPT_CONTENT=['application/json']
+CELERY_TASK_SERIALIZER='json'
+CELERY_RESULT_SERIALIZER='json'
+CELERY_TIMEZONE='UTC'
+
+# настройки для Redis
+REDIS_HOST = env('REDIS_HOST')
+REDIS_PORT = env('REDIS_PORT')
+REDIS_DB = env('REDIS_DB')
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST")

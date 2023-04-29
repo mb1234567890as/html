@@ -3,9 +3,9 @@ from django.db import models
 
 
 class Users(models.Model):
-    user_name = models.CharField(max_length=50, verbose_name="Имя аккаунта")
-    email = models.EmailField(max_length=50, verbose_name="Почта")
-    password = models.CharField(max_length=8, verbose_name="Пороль")
+    user_name = models.CharField(max_length=100, verbose_name="Имя аккаунта")
+    email = models.EmailField(max_length=100, verbose_name="Почта")
+    password = models.CharField(max_length=50, verbose_name="Пороль")
     create_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создание")
 
     def __str__(self):
